@@ -82,7 +82,7 @@ public class ContactosCovid {
 		this.poblacion.addPersona(PersonaFactory.crearPersona(data.getDatos()));
 	}
 
-	public void loadDataFromLine(String line) {
+	public void loadData(String line) {
 		try {
 			FileLine data = new FileLine(line);
 			if (data.getType().equals("PERSONA")) {
@@ -120,7 +120,7 @@ public class ContactosCovid {
 			while ((data = br.readLine()) != null) {
 				datas = dividirEntrada(data.trim());
 				for (String linea : datas) {
-					loadDataFromLine(linea);
+					loadData(linea);
 				}
 
 			}
