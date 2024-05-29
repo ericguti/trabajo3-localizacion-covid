@@ -2,8 +2,6 @@ package com.practica.ems.covid;
 
 
 import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileReader;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -35,10 +33,6 @@ public class ContactosCovid {
 		return poblacion;
 	}
 
-	public void setPoblacion(Poblacion poblacion) {
-		this.poblacion = poblacion;
-	}
-
 	public Localizacion getLocalizacion() {
 		return localizacion;
 	}
@@ -53,9 +47,6 @@ public class ContactosCovid {
 		return listaContactos;
 	}
 
-	public void setListaContactos(ListaContactos listaContactos) {
-		this.listaContactos = listaContactos;
-	}
 
 	public void addLocalizacionFromDataLine(FileLine data)
 			throws EmsInvalidNumberOfDataException, EmsDuplicateLocationException {
@@ -114,7 +105,6 @@ public class ContactosCovid {
 		loadData(data, false);
 	}
 
-	@SuppressWarnings("resource")
 	public void loadDataFile(String pathString, boolean reset) {
 		if (reset) {
 			resetData();
@@ -144,7 +134,7 @@ public class ContactosCovid {
 
 		int pos;
 		try {
-			pos = localizacion.findLocalizacion(documento, fecha, hora);
+			pos = localizacion.findLocalizacion(documento, new FechaHora(fecha, hora));
 			return pos;
 		} catch (EmsLocalizationNotFoundException e) {
 			throw new EmsLocalizationNotFoundException();
@@ -190,11 +180,6 @@ public class ContactosCovid {
 		return cadenas;
 	}
 
-	private String[] dividirLineaData(String data) {
-		String cadenas[] = data.split("\\;");
-		return cadenas;
-	}
-
 	private PosicionPersona crearPosicionPersona(String[] data) {
 		PosicionPersona posicionPersona = new PosicionPersona();
 		String fecha = null, hora;
@@ -222,16 +207,6 @@ public class ContactosCovid {
 			}
 		}
 		return posicionPersona;
-	}
-	
-	private FechaHora parsearFecha (String fecha) {
-		int dia, mes, anio;
-		String[] valores = fecha.split("\\/");
-		dia = Integer.parseInt(valores[0]);
-		mes = Integer.parseInt(valores[1]);
-		anio = Integer.parseInt(valores[2]);
-		FechaHora fechaHora = new FechaHora(dia, mes, anio, 0, 0);
-		return fechaHora;
 	}
 	
 	private FechaHora parsearFecha (String fecha, String hora) {

@@ -87,9 +87,20 @@ public class FechaHora implements Comparable<FechaHora>{
 	Hora hora;
 	
 	public FechaHora(Fecha fecha, Hora hora) {
-		super();
 		this.fecha = fecha;
 		this.hora = hora;
+	}
+
+	public FechaHora(String fecha, String hora) {
+		String[] valores = fecha.split("/");
+		int dia = Integer.parseInt(valores[0]);
+		int mes = Integer.parseInt(valores[1]);
+		int anio = Integer.parseInt(valores[2]);
+		valores = hora.split(":");
+		int hora1 = Integer.parseInt(valores[0]);
+		int minuto = Integer.parseInt(valores[1]);
+		this.fecha = new Fecha(dia, mes, anio);
+		this.hora = new Hora(hora1, minuto);
 	}
 
 	public FechaHora(int dia, int mes, int anio, int hora, int minuto) {

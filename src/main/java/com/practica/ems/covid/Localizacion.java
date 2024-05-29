@@ -27,35 +27,34 @@ public class Localizacion {
 
 	public void addLocalizacion (PosicionPersona p) throws EmsDuplicateLocationException {
 		try {
-			findLocalizacion(p.getDocumento(), p.getFechaPosicion().getFecha().toString(),p.getFechaPosicion().getHora().toString() );
+			findLocalizacion(p.getDocumento(), p.getFechaPosicion());
 			throw new EmsDuplicateLocationException();
 		}catch(EmsLocalizationNotFoundException e) {
 			lista.add(p);
 		}
 	}
 	
-	public int findLocalizacion (String documento, String fecha, String hora) throws EmsLocalizationNotFoundException {
+	public int findLocalizacion (String documento, FechaHora fechaHora) throws EmsLocalizationNotFoundException {
 	    int cont = 0;
 	    Iterator<PosicionPersona> it = lista.iterator();
 	    while(it.hasNext()) {
 	    	cont++;
 	    	PosicionPersona pp = it.next();
-	    	FechaHora fechaHora = this.parsearFecha(fecha, hora);
-	    	if(pp.getDocumento().equals(documento) && 
+	    	if(pp.getDocumento().equals(documento) &&
 	    	   pp.getFechaPosicion().equals(fechaHora)) {
 	    		return cont;
 	    	}
 	    } 
 	    throw new EmsLocalizationNotFoundException();
 	}
-	public void delLocalizacion(String documento, String fecha, String hora) throws EmsLocalizationNotFoundException {
+	public void delLocalizacion(String documento, FechaHora fechaHora) throws EmsLocalizationNotFoundException {
 	    int pos=-1;
 	    int i;
 	    /**
 	     *  Busca la localización, sino existe lanza una excepción
 	     */
 	    try {
-			pos = findLocalizacion(documento, fecha, hora);
+			pos = findLocalizacion(documento, fechaHora);
 		} catch (EmsLocalizationNotFoundException e) {
 			throw new EmsLocalizationNotFoundException();
 		}

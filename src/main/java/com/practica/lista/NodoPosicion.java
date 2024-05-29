@@ -14,22 +14,12 @@ public class NodoPosicion {
 	private NodoPosicion siguiente;
 	
 	
-	public NodoPosicion() {
-		super();
-		siguiente = null;
-	}
-
-	
-	
-	
 	public NodoPosicion(Coordenada coordenada,  int numPersonas, NodoPosicion siguiente) {
 		super();
 		this.coordenada = coordenada;		
 		this.numPersonas = numPersonas;
 		this.siguiente = siguiente;
 	}
-
-
 
 
 	public Coordenada getCoordenada() {
