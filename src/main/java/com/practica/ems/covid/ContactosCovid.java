@@ -121,27 +121,18 @@ public class ContactosCovid {
 	}
 
 	public int findPersona(String documento) throws EmsPersonNotFoundException {
-		int pos;
-		try {
-			pos = this.poblacion.findPersona(documento);
-			return pos;
-		} catch (EmsPersonNotFoundException e) {
-			throw new EmsPersonNotFoundException();
-		}
+		return this.poblacion.findPersona(documento);
 	}
 
 	public int findLocalizacion(String documento, String fecha, String hora) throws EmsLocalizationNotFoundException {
-
-		int pos;
-		try {
-			pos = localizacion.findLocalizacion(documento, new FechaHora(fecha, hora));
-			return pos;
-		} catch (EmsLocalizationNotFoundException e) {
-			throw new EmsLocalizationNotFoundException();
-		}
+		return this.localizacion.findLocalizacion(documento, new FechaHora(fecha, hora));
 	}
 
 	public List<PosicionPersona> localizacionPersona(String documento) throws EmsPersonNotFoundException {
+
+
+
+
 		int cont = 0;
 		List<PosicionPersona> lista = new ArrayList<PosicionPersona>();
 		Iterator<PosicionPersona> it = this.localizacion.getLista().iterator();
@@ -159,20 +150,12 @@ public class ContactosCovid {
 	}
 
 	public boolean delPersona(String documento) throws EmsPersonNotFoundException {
-		int cont = 0, pos = -1;
-		Iterator<Persona> it = this.poblacion.getLista().iterator();
-		while (it.hasNext()) {
-			Persona persona = it.next();
-			if (persona.getDocumento().equals(documento)) {
-				pos = cont;
-			}
-			cont++;
-		}
-		if (pos == -1) {
+
+		boolean deleted = this.poblacion.delPersona(documento);
+		if (!deleted) {
 			throw new EmsPersonNotFoundException();
 		}
-		this.poblacion.getLista().remove(pos);
-		return false;
+		return deleted;
 	}
 
 	private String[] dividirEntrada(String input) {
