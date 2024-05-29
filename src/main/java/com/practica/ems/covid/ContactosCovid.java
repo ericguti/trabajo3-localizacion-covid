@@ -4,6 +4,9 @@ package com.practica.ems.covid;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -52,16 +55,6 @@ public class ContactosCovid {
 
 	public void setListaContactos(ListaContactos listaContactos) {
 		this.listaContactos = listaContactos;
-	}
-
-
-	public void loadDataFile(String fichero, boolean reset) {
-		File archivo = null;
-		FileReader fr = null;
-		BufferedReader br = null;
-		String datas[] = null, data = null;
-		loadDataFile(fichero, reset, archivo, fr, br, datas, data);
-		
 	}
 
 	public void addLocalizacionFromDataLine(FileLine data)
@@ -122,46 +115,21 @@ public class ContactosCovid {
 	}
 
 	@SuppressWarnings("resource")
-	public void loadDataFile(String fichero, boolean reset, File archivo, FileReader fr, BufferedReader br, String datas[], String data ) {
-		try {
-			// Apertura del fichero y creacion de BufferedReader para poder
-			// hacer una lectura comoda (disponer del metodo readLine()).
-			archivo = new File(fichero);
-			fr = new FileReader(archivo);
-			br = new BufferedReader(fr);
-			if (reset) {
-				this.poblacion = new Poblacion();
-				this.localizacion = new Localizacion();
-				this.listaContactos = new ListaContactos();
-			} 
-			/**
-			 * Lectura del fichero	línea a línea. Compruebo que cada línea 
-			 * tiene el tipo PERSONA o LOCALIZACION y cargo la línea de datos en la 
-			 * lista correspondiente. Sino viene ninguno de esos tipos lanzo una excepción
-			 */
-			while ((data = br.readLine()) != null) {
-				datas = dividirEntrada(data.trim());
-				for (String linea : datas) {
-					loadDataFromLine(linea);
-				}
-
+	public void loadDataFile(String pathString, boolean reset) {
+		if (reset) {
+			resetData();
+		}
+		Path path = Paths.get(pathString);
+		try (BufferedReader br = Files.newBufferedReader(path)) {
+			String fileLine;
+			while ((fileLine = br.readLine()) != null) {
+				loadData(fileLine);
 			}
-
 		} catch (Exception e) {
 			e.printStackTrace();
-		} finally {
-			// En el finally cerramos el fichero, para asegurarnos
-			// que se cierra tanto si todo va bien como si salta
-			// una excepcion.
-			try {
-				if (null != fr) {
-					fr.close();
-				}
-			} catch (Exception e2) {
-				e2.printStackTrace();
-			}
 		}
 	}
+
 	public int findPersona(String documento) throws EmsPersonNotFoundException {
 		int pos;
 		try {
