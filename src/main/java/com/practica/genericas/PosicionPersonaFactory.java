@@ -1,7 +1,5 @@
 package com.practica.genericas;
 
-import com.practica.ems.covid.Localizacion;
-
 public class PosicionPersonaFactory {
     public static PosicionPersona createPosicionPersona(String[] data) {
         String documento = data[1];

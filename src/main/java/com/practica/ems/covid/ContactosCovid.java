@@ -6,8 +6,6 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 
 import com.practica.excecption.EmsDuplicateLocationException;
@@ -145,7 +143,7 @@ public class ContactosCovid {
 	}
 
 	private String[] dividirEntrada(String input) {
-		String cadenas[] = input.split("\\n");
+		String[] cadenas = input.split("\\n");
 		return cadenas;
 	}
 }

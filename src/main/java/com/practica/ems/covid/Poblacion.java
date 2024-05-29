@@ -48,11 +48,11 @@ public class Poblacion {
 	}
 
 	public boolean delPersona (String documento) throws EmsPersonNotFoundException{
-		boolean deleted =  this.lista.removeIf(persona -> persona.getDocumento().equals(documento));
+		boolean deleted = this.lista.removeIf(persona -> persona.getDocumento().equals(documento));
 		if (!deleted) {
 			throw new EmsPersonNotFoundException();
 		}
-		return deleted;
+		return true;
 	}
 	
 	@Override
