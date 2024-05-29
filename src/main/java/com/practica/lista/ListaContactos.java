@@ -4,9 +4,7 @@ import com.practica.genericas.FechaHora;
 import com.practica.genericas.PosicionPersona;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 public class ListaContactos {
 	private List<NodoTemporal> lista;
@@ -61,10 +59,7 @@ public class ListaContactos {
 		int totalPersonas = 0;
 		for (NodoTemporal nodoTemporal : lista) {
 			NodoPosicion current = nodoTemporal.getListaCoordenadas();
-			while (current != null) {
-				totalPersonas += current.getNumPersonas();
-				current = current.getSiguiente();
-			}
+			totalPersonas = getTotalPersonas(current, totalPersonas);
 		}
 		return totalPersonas;
 	}
@@ -86,11 +81,16 @@ public class ListaContactos {
 		for (NodoTemporal nodoTemporal : lista) {
 			if (nodoTemporal.getFecha().compareTo(inicio) >= 0 && nodoTemporal.getFecha().compareTo(fin) <= 0) {
 				NodoPosicion current = nodoTemporal.getListaCoordenadas();
-				while (current != null) {
-					totalPersonas += current.getNumPersonas();
-					current = current.getSiguiente();
-				}
+				totalPersonas = getTotalPersonas(current, totalPersonas);
 			}
+		}
+		return totalPersonas;
+	}
+
+	private static int getTotalPersonas(NodoPosicion current, int totalPersonas) {
+		while (current != null) {
+			totalPersonas += current.getNumPersonas();
+			current = current.getSiguiente();
 		}
 		return totalPersonas;
 	}
@@ -100,11 +100,16 @@ public class ListaContactos {
 		for (NodoTemporal nodoTemporal : lista) {
 			if (nodoTemporal.getFecha().compareTo(inicio) >= 0 && nodoTemporal.getFecha().compareTo(fin) <= 0) {
 				NodoPosicion current = nodoTemporal.getListaCoordenadas();
-				while (current != null) {
-					totalNodos++;
-					current = current.getSiguiente();
-				}
+				totalNodos = getTotalNodos(current, totalNodos);
 			}
+		}
+		return totalNodos;
+	}
+
+	private static int getTotalNodos(NodoPosicion current, int totalNodos) {
+		while (current != null) {
+			totalNodos++;
+			current = current.getSiguiente();
 		}
 		return totalNodos;
 	}

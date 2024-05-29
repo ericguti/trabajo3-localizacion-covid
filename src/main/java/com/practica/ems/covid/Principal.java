@@ -1,7 +1,5 @@
 package com.practica.ems.covid;
 
-import com.practica.genericas.FechaHora;
-
 public class Principal {
 	
 	
