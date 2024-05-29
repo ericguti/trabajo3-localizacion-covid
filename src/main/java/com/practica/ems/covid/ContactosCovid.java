@@ -82,19 +82,35 @@ public class ContactosCovid {
 		this.poblacion.addPersona(PersonaFactory.crearPersona(data.getDatos()));
 	}
 
-	public void loadData(String line) {
-		try {
-			FileLine data = new FileLine(line);
-			if (data.getType().equals("PERSONA")) {
-				this.addPersonaFromDataLine(data);
-			}
-			if (data.getType().equals("LOCALIZACION")) {
-				this.addLocalizacionFromDataLine(data);
-			}
-		}catch (EmsInvalidTypeException |
-				EmsInvalidNumberOfDataException | EmsDuplicatePersonException|
-				EmsDuplicateLocationException e) {
-			e.printStackTrace();
+	public void resetData() {
+		this.poblacion = new Poblacion();
+		this.localizacion = new Localizacion();
+		this.listaContactos = new ListaContactos();
+	}
+
+	public void loadDataFromLine(String line)
+			throws EmsInvalidTypeException, EmsInvalidNumberOfDataException, EmsDuplicatePersonException,
+			EmsDuplicateLocationException
+	{
+		FileLine data = new FileLine(line);
+		if (data.getType().equals("PERSONA")) {
+			this.addPersonaFromDataLine(data);
+		}
+		if (data.getType().equals("LOCALIZACION")) {
+			this.addLocalizacionFromDataLine(data);
+		}
+	}
+
+	public void loadData(String data, boolean reset)
+			throws EmsInvalidTypeException, EmsInvalidNumberOfDataException, EmsDuplicatePersonException,
+			EmsDuplicateLocationException
+	{
+		if (reset) {
+			resetData();
+		}
+		String[] lineas = dividirEntrada(data);
+		for (String linea : lineas) {
+			loadDataFromLine(linea);
 		}
 	}
 
@@ -120,7 +136,7 @@ public class ContactosCovid {
 			while ((data = br.readLine()) != null) {
 				datas = dividirEntrada(data.trim());
 				for (String linea : datas) {
-					loadData(linea);
+					loadDataFromLine(linea);
 				}
 
 			}
