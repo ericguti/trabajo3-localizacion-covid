@@ -1,7 +1,6 @@
 package com.practica.ems.covid;
 
 
-import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -16,8 +15,8 @@ public class Localizacion {
 
 	public Localizacion() {
 		super();
-		this.lista = new LinkedList<PosicionPersona>();
-	};
+		this.lista = new LinkedList<>();
+	}
 	
 	public LinkedList<PosicionPersona> getLista() {
 		return lista;
@@ -55,7 +54,7 @@ public class Localizacion {
 				personLocations.add(posicionPersona);
 			}
 		}
-		if (personLocations.size() == 0) {
+		if (personLocations.isEmpty()) {
 			throw new EmsPersonNotFoundException();
 		}
 		return personLocations;
@@ -67,22 +66,21 @@ public class Localizacion {
 
 	@Override
 	public String toString() {
-		String cadena = "";
-		for(int i = 0; i < this.lista.size(); i++) {
-			PosicionPersona pp = lista.get(i);
-	        cadena += String.format("%s;", pp.getDocumento());
-	        FechaHora fecha = pp.getFechaPosicion();        
-	        cadena+=String.format("%02d/%02d/%04d;%02d:%02d;", 
-	        		fecha.getFecha().getDia(), 
-	        		fecha.getFecha().getMes(), 
-	        		fecha.getFecha().getAnio(),
-	        		fecha.getHora().getHora(),
-	        		fecha.getHora().getMinuto());
-	        cadena+=String.format("%.4f;%.4f\n", pp.getCoordenada().getLatitud(), 
-	        		pp.getCoordenada().getLongitud());
-	    }
+		StringBuilder cadena = new StringBuilder();
+        for (PosicionPersona pp : this.lista) {
+            cadena.append(String.format("%s;", pp.getDocumento()));
+            FechaHora fecha = pp.getFechaPosicion();
+            cadena.append(String.format("%02d/%02d/%04d;%02d:%02d;",
+                    fecha.getFecha().getDia(),
+                    fecha.getFecha().getMes(),
+                    fecha.getFecha().getAnio(),
+                    fecha.getHora().getHora(),
+                    fecha.getHora().getMinuto()));
+            cadena.append(String.format("%.4f;%.4f\n", pp.getCoordenada().getLatitud(),
+                    pp.getCoordenada().getLongitud()));
+        }
 		
-		return cadena;		
+		return cadena.toString();
 	}
 	
 }
