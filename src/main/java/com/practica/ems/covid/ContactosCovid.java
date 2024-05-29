@@ -114,6 +114,12 @@ public class ContactosCovid {
 		}
 	}
 
+	public void loadData(String data)
+			throws EmsInvalidTypeException, EmsInvalidNumberOfDataException, EmsDuplicatePersonException,
+			EmsDuplicateLocationException
+	{
+		loadData(data, false);
+	}
 
 	@SuppressWarnings("resource")
 	public void loadDataFile(String fichero, boolean reset, File archivo, FileReader fr, BufferedReader br, String datas[], String data ) {
