@@ -1,9 +1,7 @@
 package com.practica.genericas;
 
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.Locale;
 
 public class FechaHora implements Comparable<FechaHora>{
 	public class Fecha {
@@ -42,8 +40,7 @@ public class FechaHora implements Comparable<FechaHora>{
 
 		@Override
 		public String toString() {
-			String cadena = String.format("%2d/%02d/%4d",dia,mes,anio);
-			return cadena;
+			return String.format("%2d/%02d/%4d",dia,mes,anio);
 		}
 		
 		
