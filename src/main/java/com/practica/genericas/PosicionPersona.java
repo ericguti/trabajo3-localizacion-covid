@@ -2,6 +2,15 @@ package com.practica.genericas;
 
 
 public class PosicionPersona {
+
+	public PosicionPersona() {}
+
+	public PosicionPersona(String documento, FechaHora fechaPosicion, Coordenada coordenada) {
+		this.fechaPosicion = fechaPosicion;
+		this.documento = documento;
+		this.coordenada = coordenada;
+	}
+
 	private Coordenada coordenada;
 	private String documento;
 	private FechaHora fechaPosicion;

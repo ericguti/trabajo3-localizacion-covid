@@ -1,7 +1,6 @@
 package com.practica.ems.covid;
 
 
-import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -15,7 +14,7 @@ public class Poblacion {
 
 	public Poblacion() {
 		super();
-		this.lista = new LinkedList<Persona>();
+		this.lista = new LinkedList<>();
 	}
 
 	public List<Persona> getLista() {
@@ -48,29 +47,33 @@ public class Poblacion {
 		return documento1.equals(documento2);
 	}
 
-	public boolean delPersona (String documento){
-		return this.lista.removeIf(persona -> persona.getDocumento().equals(documento));
+	public boolean delPersona (String documento) throws EmsPersonNotFoundException{
+		boolean deleted =  this.lista.removeIf(persona -> persona.getDocumento().equals(documento));
+		if (!deleted) {
+			throw new EmsPersonNotFoundException();
+		}
+		return deleted;
 	}
 	
 	@Override
 	public String toString() {
-		String cadena = "";
-		for(int i = 0; i < lista.size(); i++) {
-			FechaHora fecha = lista.get(i).getFechaNacimiento();
-	        // Documento	    	    	
-	        cadena+=String.format("%s;", lista.get(i).getDocumento());
-	        // nombre y apellidos	              
-	        cadena+=String.format("%s,%s;",lista.get(i).getApellidos(), lista.get(i).getNombre());	        
-	        // correo electrónico
-	        cadena+=String.format("%s;", lista.get(i).getEmail());
-	        // Direccion y código postal
-	        cadena+=String.format("%s,%s;", lista.get(i).getDireccion(), lista.get(i).getCp());	        
-	        // Fecha de nacimiento
-	        cadena+=String.format("%02d/%02d/%04d\n", fecha.getFecha().getDia(), 
-	        		fecha.getFecha().getMes(), 
-	        		fecha.getFecha().getAnio());
-		}
-		return cadena;
+		StringBuilder cadena = new StringBuilder();
+        for (Persona persona : lista) {
+            FechaHora fecha = persona.getFechaNacimiento();
+            // Documento
+            cadena.append(String.format("%s;", persona.getDocumento()));
+            // nombre y apellidos
+            cadena.append(String.format("%s,%s;", persona.getApellidos(), persona.getNombre()));
+            // correo electrónico
+            cadena.append(String.format("%s;", persona.getEmail()));
+            // Direccion y código postal
+            cadena.append(String.format("%s,%s;", persona.getDireccion(), persona.getCp()));
+            // Fecha de nacimiento
+            cadena.append(String.format("%02d/%02d/%04d\n", fecha.getFecha().getDia(),
+                    fecha.getFecha().getMes(),
+                    fecha.getFecha().getAnio()));
+        }
+		return cadena.toString();
 	}
 	
 	

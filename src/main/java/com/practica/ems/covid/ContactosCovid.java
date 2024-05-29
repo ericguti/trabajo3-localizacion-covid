@@ -2,6 +2,7 @@ package com.practica.ems.covid;
 
 
 import java.io.BufferedReader;
+import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -53,7 +54,7 @@ public class ContactosCovid {
 		if (data.getDatos().length != Constantes.MAX_DATOS_LOCALIZACION) {
 			throw new EmsInvalidNumberOfDataException("El número de datos para LOCALIZACION es menor de 6");
 		}
-		PosicionPersona pp = this.crearPosicionPersona(data.getDatos());
+		PosicionPersona pp = PosicionPersonaFactory.createPosicionPersona(data.getDatos());
 		this.localizacion.addLocalizacion(pp);
 		this.listaContactos.insertarNodoTemporal(pp);
 	}
@@ -111,12 +112,19 @@ public class ContactosCovid {
 		}
 		Path path = Paths.get(pathString);
 		try (BufferedReader br = Files.newBufferedReader(path)) {
-			String fileLine;
-			while ((fileLine = br.readLine()) != null) {
-				loadData(fileLine);
-			}
+			processFileLines(br);
 		} catch (Exception e) {
 			e.printStackTrace();
+		}
+	}
+
+	private void processFileLines(BufferedReader br)
+			throws EmsInvalidTypeException, EmsInvalidNumberOfDataException, EmsDuplicatePersonException,
+			EmsDuplicateLocationException, IOException
+	{
+		String fileLine;
+		while ((fileLine = br.readLine()) != null) {
+			loadData(fileLine);
 		}
 	}
 
@@ -129,80 +137,15 @@ public class ContactosCovid {
 	}
 
 	public List<PosicionPersona> localizacionPersona(String documento) throws EmsPersonNotFoundException {
-
-
-
-
-		int cont = 0;
-		List<PosicionPersona> lista = new ArrayList<PosicionPersona>();
-		Iterator<PosicionPersona> it = this.localizacion.getLista().iterator();
-		while (it.hasNext()) {
-			PosicionPersona pp = it.next();
-			if (pp.getDocumento().equals(documento)) {
-				cont++;
-				lista.add(pp);
-			}
-		}
-		if (cont == 0)
-			throw new EmsPersonNotFoundException();
-		else
-			return lista;
+		return this.localizacion.findLocation(documento);
 	}
 
 	public boolean delPersona(String documento) throws EmsPersonNotFoundException {
-
-		boolean deleted = this.poblacion.delPersona(documento);
-		if (!deleted) {
-			throw new EmsPersonNotFoundException();
-		}
-		return deleted;
+		return this.poblacion.delPersona(documento);
 	}
 
 	private String[] dividirEntrada(String input) {
 		String cadenas[] = input.split("\\n");
 		return cadenas;
-	}
-
-	private PosicionPersona crearPosicionPersona(String[] data) {
-		PosicionPersona posicionPersona = new PosicionPersona();
-		String fecha = null, hora;
-		float latitud = 0, longitud;
-		for (int i = 1; i < Constantes.MAX_DATOS_LOCALIZACION; i++) {
-			String s = data[i];
-			switch (i) {
-			case 1:
-				posicionPersona.setDocumento(s);
-				break;
-			case 2:
-				fecha = data[i];
-				break;
-			case 3:
-				hora = data[i];
-				posicionPersona.setFechaPosicion(parsearFecha(fecha, hora));
-				break;
-			case 4:
-				latitud = Float.parseFloat(s);
-				break;
-			case 5:
-				longitud = Float.parseFloat(s);
-				posicionPersona.setCoordenada(new Coordenada(latitud, longitud));
-				break;
-			}
-		}
-		return posicionPersona;
-	}
-	
-	private FechaHora parsearFecha (String fecha, String hora) {
-		int dia, mes, anio;
-		String[] valores = fecha.split("\\/");
-		dia = Integer.parseInt(valores[0]);
-		mes = Integer.parseInt(valores[1]);
-		anio = Integer.parseInt(valores[2]);
-		int minuto, segundo;
-		valores = hora.split("\\:");
-		minuto = Integer.parseInt(valores[0]);
-		segundo = Integer.parseInt(valores[1]);
-		FechaHora fechaHora = new FechaHora(dia, mes, anio, minuto, segundo);
-		return fechaHora;
 	}
 }
